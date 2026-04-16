@@ -1,0 +1,574 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Types of Government Chromebook Game</title>
+  <style>
+    * { box-sizing: border-box; }
+    :root{
+      --bg1:#17324d;
+      --bg2:#245b7a;
+      --panel:#fff8eb;
+      --dark:#1f2937;
+      --orange:#ea580c;
+      --orange2:#f97316;
+      --gold:#facc15;
+      --soft:#f3f4f6;
+    }
+    html, body {
+      margin: 0;
+      height: 100%;
+      font-family: Arial, Helvetica, sans-serif;
+      background: linear-gradient(135deg, var(--bg1), var(--bg2));
+      color: var(--dark);
+    }
+    body {
+      padding: 8px;
+    }
+    .app {
+      width: min(100%, 980px);
+      min-height: calc(100vh - 16px);
+      margin: 0 auto;
+      background: var(--panel);
+      border-radius: 18px;
+      overflow: hidden;
+      box-shadow: 0 14px 30px rgba(0,0,0,0.25);
+      display: grid;
+      grid-template-rows: auto auto 1fr;
+    }
+    .header {
+      background: linear-gradient(135deg, #f58529, #d04a16);
+      color: white;
+      padding: 10px 14px;
+      text-align: center;
+    }
+    .header h1 {
+      margin: 0;
+      font-size: clamp(1.1rem, 2.6vw, 1.7rem);
+      line-height: 1.15;
+    }
+    .header p {
+      margin: 4px 0 0;
+      font-size: clamp(.78rem, 1.8vw, .95rem);
+    }
+    .topbar {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px;
+      justify-content: space-between;
+      align-items: center;
+      padding: 8px 10px;
+      background: #202734;
+      color: #fff;
+    }
+    .stats, .controls {
+      display: flex;
+      gap: 8px;
+      flex-wrap: wrap;
+    }
+    .pill, .ctrl {
+      border-radius: 999px;
+      padding: 8px 12px;
+      font-weight: 700;
+      font-size: .9rem;
+    }
+    .pill {
+      background: #111827;
+      color: #f9fafb;
+    }
+    .ctrl {
+      border: none;
+      cursor: pointer;
+    }
+    .music-btn { background: var(--gold); color: #111827; }
+    .reset-btn { background: #d1d5db; color: #111827; }
+
+    .content {
+      display: grid;
+      grid-template-columns: 260px 1fr;
+      gap: 12px;
+      padding: 12px;
+      min-height: 0;
+    }
+
+    .left {
+      display: grid;
+      gap: 10px;
+      align-content: start;
+    }
+
+    .lane-wrap {
+      background: #7c4a20;
+      border-radius: 20px;
+      padding: 10px;
+      box-shadow: inset 0 0 0 3px #d8b182;
+    }
+    .lane {
+      min-height: 170px;
+      border-radius: 16px;
+      background: repeating-linear-gradient(90deg, #ebcfaa 0 38px, #e2c18f 38px 76px);
+      padding: 12px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+    .pins {
+      display: grid;
+      grid-template-columns: repeat(4, 30px);
+      gap: 8px;
+      justify-content: center;
+      align-content: center;
+    }
+    .pin {
+      width: 20px;
+      height: 44px;
+      border-radius: 14px 14px 10px 10px;
+      background: linear-gradient(#fffef7, #ffe2b5);
+      position: relative;
+      box-shadow: 0 4px 0 #b7792e, 0 2px 7px rgba(0,0,0,0.22);
+      transition: transform .35s ease, opacity .35s ease;
+      margin: 0 auto;
+    }
+    .pin::before {
+      content: "";
+      position: absolute;
+      top: 9px;
+      left: 2px;
+      right: 2px;
+      height: 6px;
+      border-radius: 8px;
+      background: #ef4444;
+    }
+    .pin.hidden { opacity: 0; transform: rotate(90deg) translateX(18px); }
+
+    .balls {
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      gap: 8px;
+    }
+    .ball {
+      border: none;
+      min-height: 56px;
+      border-radius: 16px;
+      background: radial-gradient(circle at 30% 30%, #ffd699, #b95b1b);
+      color: white;
+      font-size: 1.35rem;
+      box-shadow: 0 5px 0 #7c3f12, 0 6px 14px rgba(0,0,0,0.25);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      cursor: pointer;
+    }
+
+    .quiz {
+      background: #fff;
+      border-radius: 20px;
+      padding: 14px;
+      border: 2px solid #f3c17c;
+      display: grid;
+      grid-template-rows: auto auto auto 1fr auto;
+      min-height: 0;
+    }
+    .badge {
+      display: inline-block;
+      background: var(--orange);
+      color: white;
+      border-radius: 999px;
+      padding: 7px 12px;
+      font-size: .82rem;
+      font-weight: 700;
+      margin-bottom: 10px;
+      width: fit-content;
+    }
+    #question {
+      font-size: clamp(1rem, 2.2vw, 1.35rem);
+      font-weight: 700;
+      line-height: 1.25;
+      margin-bottom: 10px;
+      min-height: 58px;
+    }
+    .options {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 8px;
+      align-content: start;
+    }
+    .option {
+      border: none;
+      background: var(--dark);
+      color: white;
+      padding: 12px;
+      border-radius: 14px;
+      text-align: left;
+      font-size: .95rem;
+      min-height: 58px;
+      cursor: pointer;
+    }
+    .option:hover { background: var(--orange2); }
+    #feedback {
+      margin-top: 10px;
+      padding: 10px 12px;
+      background: var(--soft);
+      border-radius: 14px;
+      font-weight: 700;
+      min-height: 44px;
+      font-size: .92rem;
+    }
+    .tip {
+      font-size: .82rem;
+      color: #374151;
+      margin-top: 8px;
+      line-height: 1.35;
+    }
+
+    @media (max-width: 900px) {
+      .content {
+        grid-template-columns: 220px 1fr;
+      }
+      .lane { min-height: 150px; }
+      .options { grid-template-columns: 1fr 1fr; }
+      .option { font-size: .9rem; min-height: 54px; }
+    }
+
+    @media (max-width: 700px) {
+      body { padding: 4px; }
+      .app {
+        min-height: calc(100vh - 8px);
+        border-radius: 12px;
+      }
+      .content {
+        grid-template-columns: 1fr;
+        gap: 10px;
+        padding: 10px;
+      }
+      .left {
+        grid-template-columns: 1.1fr .9fr;
+        align-items: start;
+      }
+      .lane { min-height: 120px; }
+      .balls { grid-template-columns: repeat(4, 1fr); }
+      .ball { min-height: 48px; font-size: 1.15rem; }
+      #question { min-height: 44px; }
+    }
+
+    @media (max-width: 480px) {
+      .topbar { padding: 8px; }
+      .pill, .ctrl { padding: 7px 10px; font-size: .82rem; }
+      .left { grid-template-columns: 1fr; }
+      .options { grid-template-columns: 1fr; }
+      .option { min-height: 48px; padding: 10px; }
+      .quiz { padding: 12px; }
+      #question { font-size: 1rem; }
+    }
+  </style>
+</head>
+<body>
+  <div class="app">
+    <div class="header">
+      <h1>🎳 Types of Government Bowl</h1>
+      <p>Made to fit student Chromebooks</p>
+    </div>
+
+    <div class="topbar">
+      <div class="stats">
+        <div class="pill">Question: <span id="frame">1</span>/20</div>
+        <div class="pill">Score: <span id="score">0</span></div>
+        <div class="pill">Best: <span id="best">0</span></div>
+      </div>
+      <div class="controls">
+        <button class="ctrl music-btn" id="musicBtn">Music: Off</button>
+        <button class="ctrl reset-btn" id="resetBtn">New Game</button>
+      </div>
+    </div>
+
+    <div class="content">
+      <div class="left">
+        <div class="lane-wrap">
+          <div class="lane">
+            <div class="pins" id="pins"></div>
+          </div>
+        </div>
+
+        <div class="balls">
+          <button class="ball" aria-label="Ball 1">🎳</button>
+          <button class="ball" aria-label="Ball 2">🎳</button>
+          <button class="ball" aria-label="Ball 3">🎳</button>
+          <button class="ball" aria-label="Ball 4">🎳</button>
+        </div>
+      </div>
+
+      <div class="quiz">
+        <div class="badge">Government Challenge</div>
+        <div id="question">Loading question...</div>
+        <div class="options" id="options"></div>
+        <div id="feedback">Choose the correct answer to unlock the bowling balls.</div>
+        <div class="tip">Topics: monarchy, dictatorship, democracy, direct democracy, representative democracy, oligarchy, junta, theocracy, and anarchy.</div>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    const questions = [
+      { q: "What is one thing all governments have in common?", a: "Someone is in charge", options: ["Nobody is in charge", "Someone is in charge", "All people vote every day", "All governments are the same"] },
+      { q: "Who has all the power in an autocracy?", a: "One person", options: ["One person", "A small group", "All citizens", "No one"] },
+      { q: "Which two forms are the main types of autocracy?", a: "Monarchy and dictatorship", options: ["Democracy and oligarchy", "Monarchy and dictatorship", "Anarchy and monarchy", "Junta and democracy"] },
+      { q: "Who rules in a monarchy?", a: "A king or queen", options: ["A judge", "A king or queen", "A military group", "All citizens"] },
+      { q: "How do monarchs usually come to power?", a: "Through the family line", options: ["Through voting", "Through the family line", "Through a court decision", "Through a class election"] },
+      { q: "What is a dictatorship?", a: "A government where one leader has absolute control", options: ["A government where citizens vote directly", "A government ruled by religion only", "A government where one leader has absolute control", "A government with no leader"] },
+      { q: "In a dictatorship, what do other branches of government usually do?", a: "They do what the dictator wants", options: ["They represent citizens freely", "They do what the dictator wants", "They replace the dictator", "They stop all laws"] },
+      { q: "Who holds political power in a democracy?", a: "Citizens", options: ["Kings", "Military officers", "Citizens", "Judges only"] },
+      { q: "What are the two main types of democracy?", a: "Direct and representative", options: ["Direct and representative", "Religious and military", "Royal and federal", "Local and global"] },
+      { q: "What do citizens do in a representative democracy?", a: "Elect leaders", options: ["Elect leaders", "Inherit power", "Rule by force", "Choose a dictator"] },
+      { q: "Who does the day-to-day work in a representative democracy?", a: "Elected representatives", options: ["Elected representatives", "Only the king", "Only judges", "Nobody"] },
+      { q: "What can citizens do if they do not like their representatives?", a: "Vote in new ones", options: ["Vote in new ones", "End the constitution", "Cancel the government", "Choose a monarch"] },
+      { q: "In a direct democracy, how many representatives are there?", a: "There are no representatives", options: ["One representative", "Two representatives", "There are no representatives", "Many representatives"] },
+      { q: "Which city-state is the best example of direct democracy in the reading?", a: "Athens", options: ["Peru", "Norway", "Athens", "Myanmar"] },
+      { q: "What does oligarchy mean?", a: "Rule by a few", options: ["Rule by one", "Rule by a few", "Rule by all", "Rule by none"] },
+      { q: "Who has power in an oligarchy?", a: "A small group of people", options: ["A small group of people", "One king", "All citizens", "No one"] },
+      { q: "What is a junta?", a: "A small group, usually military officers, who rule by force", options: ["A group of elected citizens", "A small group, usually military officers, who rule by force", "A king and queen ruling together", "A country with no laws"] },
+      { q: "What is a theocracy?", a: "A government that recognizes God or a divine being as the highest authority", options: ["A government ruled by students", "A government that recognizes God or a divine being as the highest authority", "A government with no ruler", "A government ruled only by business owners"] },
+      { q: "What is anarchy?", a: "A government where nobody is in control", options: ["A government ruled by a king", "A government ruled by elected leaders", "A government where nobody is in control", "A government ruled by one party"] },
+      { q: "How many countries have anarchy as their form of government today?", a: "No countries", options: ["Many countries", "A few countries", "Only one country", "No countries"] }
+    ];
+
+    let questionNumber = 1;
+    let score = 0;
+    let best = parseInt(localStorage.getItem('gov_bowl_chromebook_best') || '0', 10);
+    let unlocked = false;
+    let currentQuestion = null;
+    let askedIndexes = [];
+
+    const frameEl = document.getElementById('frame');
+    const scoreEl = document.getElementById('score');
+    const bestEl = document.getElementById('best');
+    const pinsEl = document.getElementById('pins');
+    const questionEl = document.getElementById('question');
+    const optionsEl = document.getElementById('options');
+    const feedbackEl = document.getElementById('feedback');
+    const musicBtn = document.getElementById('musicBtn');
+
+    bestEl.textContent = best;
+
+    function shuffle(arr) {
+      return [...arr].sort(() => Math.random() - 0.5);
+    }
+
+    function drawPins(left = 10) {
+      pinsEl.innerHTML = '';
+      for (let idx = 0; idx < 10; idx++) {
+        const pin = document.createElement('div');
+        pin.className = 'pin';
+        if (idx >= left) pin.classList.add('hidden');
+        pinsEl.appendChild(pin);
+      }
+    }
+
+    function updateStats() {
+      frameEl.textContent = Math.min(questionNumber, 20);
+      scoreEl.textContent = score;
+      if (score > best) {
+        best = score;
+        bestEl.textContent = best;
+        localStorage.setItem('gov_bowl_chromebook_best', String(best));
+      }
+    }
+
+    function getNextQuestionIndex() {
+      const remaining = questions.map((_, i) => i).filter(i => !askedIndexes.includes(i));
+      if (remaining.length === 0) return null;
+      return remaining[Math.floor(Math.random() * remaining.length)];
+    }
+
+    function loadQuestion() {
+      unlocked = false;
+      const idx = getNextQuestionIndex();
+      if (idx === null) {
+        questionEl.textContent = 'Game complete. You answered all 20 questions.';
+        optionsEl.innerHTML = '';
+        feedbackEl.textContent = `Final score: ${score}. Click New Game to play again.`;
+        return;
+      }
+      askedIndexes.push(idx);
+      currentQuestion = questions[idx];
+      questionEl.textContent = currentQuestion.q;
+      optionsEl.innerHTML = '';
+
+      shuffle(currentQuestion.options).forEach(opt => {
+        const btn = document.createElement('button');
+        btn.className = 'option';
+        btn.textContent = opt;
+        btn.addEventListener('click', () => answer(opt));
+        optionsEl.appendChild(btn);
+      });
+
+      feedbackEl.textContent = 'Choose the correct answer to unlock the bowling balls.';
+      feedbackEl.style.background = '#f3f4f6';
+    }
+
+    function answer(selected) {
+      if (!currentQuestion) return;
+
+      if (selected === currentQuestion.a) {
+        unlocked = true;
+        questionEl.textContent = 'Correct. Click any bowling ball.';
+        optionsEl.innerHTML = '';
+        feedbackEl.textContent = 'Great job. You unlocked the bowling balls.';
+        feedbackEl.style.background = '#dcfce7';
+        sound.correct();
+      } else {
+        unlocked = false;
+        feedbackEl.textContent = `Wrong. Correct answer: ${currentQuestion.a}.`;
+        feedbackEl.style.background = '#fee2e2';
+        sound.wrong();
+        questionNumber += 1;
+        updateStats();
+
+        if (questionNumber > 20) {
+          questionEl.textContent = 'Game complete.';
+          optionsEl.innerHTML = '';
+          feedbackEl.textContent = `Final score: ${score}. Click New Game to play again.`;
+          return;
+        }
+
+        setTimeout(() => {
+          drawPins(10);
+          loadQuestion();
+          updateStats();
+        }, 1100);
+      }
+    }
+
+    function strikeAnimation(hitCount) {
+      const pins = [...pinsEl.children];
+      for (let i = 10 - hitCount; i < 10; i++) {
+        if (pins[i]) pins[i].classList.add('hidden');
+      }
+    }
+
+    function roll() {
+      if (!unlocked) {
+        feedbackEl.textContent = 'Answer the question correctly first.';
+        feedbackEl.style.background = '#fee2e2';
+        sound.bump();
+        return;
+      }
+
+      sound.roll();
+      const hit = Math.random() < 0.35 ? 10 : Math.floor(Math.random() * 6) + 4;
+      strikeAnimation(hit);
+      unlocked = false;
+
+      if (hit === 10) {
+        score += 30;
+        feedbackEl.textContent = 'Strike! +30 points.';
+        feedbackEl.style.background = '#fde68a';
+        sound.strike();
+      } else {
+        score += hit;
+        feedbackEl.textContent = `You knocked down ${hit} pins. +${hit} points.`;
+        feedbackEl.style.background = '#ffedd5';
+      }
+
+      questionNumber += 1;
+      updateStats();
+
+      if (questionNumber > 20) {
+        setTimeout(() => {
+          questionEl.textContent = 'Game complete. You finished all 20 questions.';
+          optionsEl.innerHTML = '';
+          feedbackEl.textContent = `Final score: ${score}. Click New Game to play again.`;
+        }, 900);
+        return;
+      }
+
+      setTimeout(() => {
+        drawPins(10);
+        loadQuestion();
+        updateStats();
+      }, 900);
+    }
+
+    function startGame() {
+      questionNumber = 1;
+      score = 0;
+      askedIndexes = [];
+      currentQuestion = null;
+      drawPins(10);
+      updateStats();
+      loadQuestion();
+    }
+
+    document.querySelectorAll('.ball').forEach(ball => ball.addEventListener('click', roll));
+    document.getElementById('resetBtn').addEventListener('click', startGame);
+
+    let audioCtx = null;
+    let musicOn = false;
+    let musicTimer = null;
+
+    function getCtx() {
+      if (!audioCtx) audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+      if (audioCtx.state === 'suspended') audioCtx.resume();
+      return audioCtx;
+    }
+
+    function tone(freq, duration = 0.18, type = 'sine', volume = 0.04, delay = 0) {
+      const ctx = getCtx();
+      const osc = ctx.createOscillator();
+      const gain = ctx.createGain();
+      osc.type = type;
+      osc.frequency.setValueAtTime(freq, ctx.currentTime + delay);
+      gain.gain.setValueAtTime(0.0001, ctx.currentTime + delay);
+      gain.gain.exponentialRampToValueAtTime(volume, ctx.currentTime + delay + 0.01);
+      gain.gain.exponentialRampToValueAtTime(0.0001, ctx.currentTime + delay + duration);
+      osc.connect(gain).connect(ctx.destination);
+      osc.start(ctx.currentTime + delay);
+      osc.stop(ctx.currentTime + delay + duration + 0.02);
+    }
+
+    const sound = {
+      correct() { tone(659, .12, 'triangle', .05); tone(784, .14, 'triangle', .04, .11); },
+      wrong() { tone(220, .18, 'sawtooth', .04); tone(165, .24, 'sawtooth', .03, .16); },
+      roll() { tone(180, .07, 'square', .03); tone(140, .08, 'square', .03, .07); tone(110, .11, 'square', .03, .15); },
+      strike() { tone(523, .12, 'triangle', .05); tone(659, .12, 'triangle', .05, .12); tone(784, .16, 'triangle', .05, .24); tone(1047, .25, 'triangle', .05, .40); },
+      bump() { tone(250, .07, 'square', .02); }
+    };
+
+    const musicPattern = [392, 494, 523, 494, 392, 392, 523, 494];
+    function playMusicLoop() {
+      if (!musicOn) return;
+      let step = 0;
+      if (musicTimer) clearInterval(musicTimer);
+      musicTimer = setInterval(() => {
+        if (!musicOn) return;
+        tone(musicPattern[step % musicPattern.length], 0.18, 'triangle', 0.02);
+        step += 1;
+      }, 380);
+    }
+
+    function updateMusicButton() {
+      musicBtn.textContent = `Music: ${musicOn ? 'On' : 'Off'}`;
+    }
+
+    musicBtn.addEventListener('click', () => {
+      getCtx();
+      musicOn = !musicOn;
+      if (musicOn) {
+        playMusicLoop();
+        tone(523, 0.08, 'triangle', 0.03);
+      } else if (musicTimer) {
+        clearInterval(musicTimer);
+        musicTimer = null;
+      }
+      updateMusicButton();
+    });
+
+    document.body.addEventListener('click', () => {
+      try { getCtx(); } catch(e) {}
+    }, { once: true });
+
+    startGame();
+    updateMusicButton();
+  </script>
+</body>
+</html>
